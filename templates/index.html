@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-eq uiv="refresh" content="3">
-  <title>Ver 0.0.1</title>
+  <meta http-equi v="refresh" content="10">
+  <title>Ver 0.1.0</title>
   <style>
+    * {
+      cursor: none;
+    }
     body {
       margin: 0;
       background: #000;
@@ -17,16 +20,36 @@
       font-size: 4rem;
       top: 30%;
       text-align: center;
-      animation: greet 2s;
+      animation: greet-in 1.5s;
       animation-timing-function: ease-out;
       animation-fill-mode: forwards;
     }
-    @keyframes greet {
+    @keyframes greet-in {
       from {transform: translate(0, 6rem); opacity: 0.0;}
+    }
+    @keyframes greet-out {
+      to {transform: translate(0, -6rem); opacity: 0.0;}
     }
     
     
-    
+    .news {
+      position: absolute;
+      right: 0;
+      bottom: 20%;
+      
+    }
+    .news .headlines {
+      line-height: 3rem;
+      font-size: 1.6rem;
+      text-align: right;
+      animation: headline 1s;
+      animation-timing-function: ease-out;
+      animation-fill-mode: forwards;
+      animation-play-state: paused;
+    }
+    @keyframes headline {
+      from {transform: translate(0, 6rem); opacity: 0.0;}
+    }
     
     
     .bottom-bar {
@@ -107,22 +130,54 @@
   
   
   var sayVoice = function() {
-    const Http = new XMLHttpRequest();
-    const url='/voice';
-    Http.open("GET", url);
-    Http.send();
+    const req = new XMLHttpRequest();
+    const url = "/voice";
+    req.open("GET", url);
+    req.send();
+  }
+  
+  var trimSource = function(headline) {
+    return headline.slice(0, headline.indexOf("-")-1)
+  }
+  var getNews = function() {
+    const req = new XMLHttpRequest();
+    const url = "https://newsapi.org/v2/top-headlines?country=us&apiKey=1cfb1a00469d4ff79630775d5b0c657d";
+    req.open("GET", url);
+    req.send();
+    req.onreadystatechange = function() {
+      data = JSON.parse(req.responseText);
+      console.log(data);
+      news_0.innerHTML = trimSource(data.articles[0].title);
+      news_1.innerHTML = trimSource(data.articles[1].title);
+      news_2.innerHTML = trimSource(data.articles[2].title);
+      setTimeout(function() {news_0.style.animationPlayState = "running"}, 1600);
+      setTimeout(function() {news_1.style.animationPlayState = "running"}, 2000);
+      setTimeout(function() {news_2.style.animationPlayState = "running"}, 2400);
+    }
   }
   
   window.onload = function() {
     updateTime();
     setInterval(updateTime, 1000);
     setTimeout(sayVoice, 1000);
+    getNews();
+    setTimeout(function() {
+      greet.style.animation = "greet-out 2s";
+      }, 3000);
+    setTimeout(function() {
+      greet.style.display = "none";
+      }, 5000);
   };
+  
   </script>
 </head>
 <body>
-  <div class="greet">{{ data["greet"]["text"] }}</div>
-  
+  <div id="greet" class="greet">{{ data["greet"]["text"] }}</div>
+  <div class="news">
+    <div id="news_0" class="headlines"></div>
+    <div id="news_1" class="headlines"></div>
+    <div id="news_2" class="headlines"></div>
+  </div>
   
   <div class="bottom-bar">
     <div>

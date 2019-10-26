@@ -1,6 +1,7 @@
 from io import StringIO
 import datetime
 import time
+import os
 
 from flask import Flask, render_template, make_response, g
 
@@ -13,7 +14,8 @@ import threading
 import json
 
 import requests
-from playsound import playsound
+#from playsound import playsound
+import pyaudio
 
 def fetchWeather(use_realtime=False):
     if use_realtime:
@@ -43,15 +45,33 @@ def fetchCalendar():
         "text": "111",
         }
     return data
+'''
+def generateVoice(text, filename="output"):
+    file_path = "tmp/%s.wav" % filename
+    data = 
+    print(data)
+    #playsound(file_path)
+    chunk = 1024
+    FORMAT = pyaudio.paInt16
+    CHANNELS = 1
+    RATE = 41000
+    RECORD_SECONDS = 5
+    p = pyaudio.PyAudio()
 
-def generateVoice(text):
-    voic = tts.textToSpeech(text)
-    
-    return voic
+    stream = p.open(format = FORMAT,
+        channels = CHANNELS,
+        rate = RATE,
+        input = True,
+        output = True,
+        frames_per_buffer = chunk)
+        
+    for i in range(0, len(data), chunk):
+        stream.write(data[i:i+chunk])
+     '''   
 # ------------
 
 user_settings = {
-    "name": "Pei hang"
+    "name": "Hanning"
     }
 
 app = Flask(__name__)
@@ -77,23 +97,18 @@ def voicePage():
     debug = False
     if not debug:
         voice_string = data["greet"]["voice"] +"\n"+ data["weather"]["voice"] +"\n"+ data["calendar"]["voice"]
-        print(voice_string)
-        voic = b""
-        voic += generateVoice(data["greet"]["voice"])
-        print(voic)
-        voic += b"\x00"*1
-        voic += generateVoice(data["weather"]["voice"])
-        
-        with open("tmp/output.mp3", "wb") as out:
-            out.write(voic)
-            print("Audio content written to file 'tmp/output.mp3'")
-        playsound("tmp/output.mp3")
-        return ""
-        time.sleep(1)
-        
-        time.sleep(1)
-        generateVoice(data["calendar"]["voice"])
-        time.sleep(1)
+        byte_stream = tts.textToSpeech(data["greet"]["voice"])
+        byte_stream += b"\x00" * 10240
+        byte_stream += tts.textToSpeech(data["weather"]["voice"])
+        byte_stream += b"\x00" * 10240
+        byte_stream += tts.textToSpeech(data["calendar"]["voice"])
+        p = pyaudio.PyAudio()
+        stream = p.open(format=pyaudio.paInt16,
+            channels=2,
+            rate=12000,
+            output=True,
+            frames_per_buffer=1024)
+        stream.write(byte_stream)
     return ""
 
 

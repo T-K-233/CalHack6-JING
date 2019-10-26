@@ -13,12 +13,14 @@ voice = texttospeech_v1beta1.types.VoiceSelectionParams(
         ssml_gender=texttospeech_v1beta1.enums.SsmlVoiceGender.FEMALE)
 
 audio_config = texttospeech_v1beta1.types.AudioConfig(
-        audio_encoding=texttospeech_v1beta1.enums.AudioEncoding.MP3)
+        audio_encoding=texttospeech_v1beta1.enums.AudioEncoding.LINEAR16)
 
 def textToSpeech(text):
     synthesis_input = texttospeech_v1beta1.types.SynthesisInput(text=text)
     response = client.synthesize_speech(synthesis_input, voice, audio_config)
-    '''with open("tmp/output.mp3", "wb") as out:
-            out.write(response.audio_content)
-            print("Audio content written to file 'tmp/output.mp3'")'''
+    '''
+    with open(file_path, "wb") as out:
+        out.write(response.audio_content)
+        print("Audio content written to file %s" % file_path)
+        '''
     return response.audio_content
