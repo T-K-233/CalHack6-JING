@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-eq uiv="refresh" content="3">
+  <title>Ver 0.0.1</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: #FFF;
+      font-family: Microsoft YaHei Light;
+      overflow: hidden;
+    }
+    .greet {
+      position: absolute;
+      width: 100vw;
+      font-size: 4rem;
+      top: 30%;
+      text-align: center;
+      animation: greet 2s;
+      animation-timing-function: ease-out;
+      animation-fill-mode: forwards;
+    }
+    @keyframes greet {
+      from {transform: translate(0, 6rem); opacity: 0.0;}
+    }
+    
+    
+    
+    
+    
+    .bottom-bar {
+      position: absolute;
+      width: 100vw;
+      height: 8rem;
+      left: 0;
+      bottom: 3rem;
+      font-size: 6rem;
+    }
+    .weather {
+      position: absolute;
+      left: 3rem;
+      top: 0;
+    }
+    .weather .temperature {
+      
+    }
+    .weather .description {
+      font-size: 0.2em;
+      margin-top: -0.8rem;
+      margin-left: 0.5rem;
+    }
+    .time {
+      position: absolute;
+      text-align: right;
+      top: 0;
+      right: 3rem;
+      bottom: 3rem;
+    }
+    #time_sep {
+      display: inline-block;
+      margin-left: 0em;
+      width: 0.3em;
+    }
+    
+    
+    
+    
+    #audio_container {
+      display: none;
+    }
+    
+    .line-conponent {
+      width: 9rem;
+      height: 1px;
+      background: #FFF;
+      position: absolute;
+    }
+    .line-conponent .mask {
+      position: relative;
+      z-index: 10;
+      background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1), rgba(0, 0, 0, 1));
+      width: 300%;
+      height: 100%;
+      animation: line-fade-in 2s;
+      animation-timing-function: ease-out;
+      animation-fill-mode: forwards;
+      opacity: 1;
+    }
+    @keyframes line-fade-in{
+      from {transform: translate(-66%, 0);}
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script>
+  var time_flag = false;
+  var updateTime = function() {
+    let d = new Date();
+    let hh = d.getHours(); 
+    let mm = d.getMinutes();
+    time_HH.innerHTML = hh < 10 ? "0" + hh: hh;
+    time_MM.innerHTML = mm < 10 ? "0" + mm: mm;
+    time_sep.innerHTML = time_flag ? ":": "";
+    time_flag = !time_flag;
+  }
+  
+  
+  
+  var sayVoice = function() {
+    const Http = new XMLHttpRequest();
+    const url='/voice';
+    Http.open("GET", url);
+    Http.send();
+  }
+  
+  window.onload = function() {
+    updateTime();
+    setInterval(updateTime, 1000);
+    setTimeout(sayVoice, 1000);
+  };
+  </script>
+</head>
+<body>
+  <div class="greet">{{ data["greet"]["text"] }}</div>
+  
+  
+  <div class="bottom-bar">
+    <div>
+      <div class="weather">
+        <div class="temperature">{{ data["weather"]["temperatureMax"] }}/{{ data["weather"]["temperatureMin"] }}℉</div>
+        <div class="description">{{ data["weather"]["text"] }}</div>
+      </div>
+      <div class="time"><span id="time_HH"></span><span id="time_sep"></span><span id="time_MM"></span></div>
+    </div>
+  </div>
+  
+  
+  <div id="audio_container"></div>
+  
+  
+  
+  <div class="line-conponent"><div class="mask"></div><div class="line"></div></div>
+</body>
+</html>
