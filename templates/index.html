@@ -1,139 +1,170 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-equi v="refresh" content="10">
-  <title>Ver 0.1.0</title>
+  <meta http-equiv="ref resh" content="8">
+  <title>The Magic Mirror</title>
   <style>
-    * {
-      cursor: none;
-    }
-    body {
-      margin: 0;
-      background: #000;
-      color: #FFF;
-      font-family: Microsoft YaHei Light;
-      overflow: hidden;
-    }
-    .greet {
-      position: absolute;
-      width: 100vw;
-      font-size: 4rem;
-      top: 30%;
-      text-align: center;
-      animation: greet-in 1.5s;
-      animation-timing-function: ease-out;
-      animation-fill-mode: forwards;
-    }
-    @keyframes greet-in {
-      from {transform: translate(0, 6rem); opacity: 0.0;}
-    }
-    @keyframes greet-out {
-      to {transform: translate(0, -6rem); opacity: 0.0;}
-    }
+  /* === Global Settings === */
+  * { cursor: none; }
+  body {
+    margin: 0;
+    overflow: hidden;
+    background: #000;
+    color: #FFF;
+    font-family: Microsoft YaHei Light;
+  }
+  
+  /* === Greet Block === */
+  .greet, .one-line-a-day {
+    position:absolute;
+    width: 100vw;
+    text-align: center;
+  }
+  .greet {
+    top: 25vh;
+    font-size: 8vw;
+    opacity: 0;
+    animation: ascent-in 1.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+    animation-fill-mode: forwards;
+  }
+  @keyframes ascent-in {
+    from {transform: translate(0, 6rem); opacity: 0;}
+    to {opacity: 1;}
+  }
+  @keyframes ascent-out {
+    from {opacity: 1;}
+    to {transform: translate(0, -6rem); opacity: 0;}
+  }
+  
+  /* === "One line a day" Block === */
+  .one-line-a-day {
+    bottom: 30vh;
+    font-size: 2.8vw;
+    opacity: 0;
+    animation: ascent-in 2s cubic-bezier(0.22, 0.61, 0.36, 1) 1.5s;
+    animation-fill-mode: forwards;
+  }
+  
+  /* === Function Blocks === */
+  @keyframes fade-in {
+    from {transform: translate(-0.5rem, 0); opacity: 0;}
+    to {opacity: 1;}
+  }
+  .block-list {
+    position: absolute;
+    opacity: 0;
+    left: 8vw;
+    right: 8vw;
+    height: 25vh;
+    bottom: 18vh;
+    animation: fade-in 1.5s ease-in;
+    animation-fill-mode: forwards;
+    animation-play-state: paused;
+  }
+  .block-list .wrap {
+    white-space: nowrap;
     
+  }
+  .block-list .block {
+    height: 18vh;
+    width: 100%;
+    margin-right: 16vw;
+    display: inline-block;
+  }
+  
+  .block-list .block .title {
+    font-size: 5vw;
+    font-family: Microsoft YaHei;
+  }
+  .block-list .block .content {
+    font-size: 0.8rem;
+  }
+  .line {
+    background: #FFF;
+    height: 1px;
+    width: 50%;
+    margin-top: 1vh;
+  }
+  .block-list .pagination {
+    width: 100%;
+    text-align: center;
+  }
+  .block-list .pagination .dot {
+    display: inline-block;
+    background: #AAA;
+    width: 1vw;
+    height: 1vw;
+    border-radius: 0.5vw;
+    margin: 0 0.5vw;
+  }
+  .block-list .pagination .active.dot {
+    background: #FFF;
+  }
+  
+  #news_titleDOM {
+    position: relative;
+  }
+  #news_content_simpleDOM {
     
-    .news {
-      position: absolute;
-      right: 0;
-      bottom: 20%;
-      
-    }
-    .news .headlines {
-      line-height: 3rem;
-      font-size: 1.6rem;
-      text-align: right;
-      animation: headline 1s;
-      animation-timing-function: ease-out;
-      animation-fill-mode: forwards;
-      animation-play-state: paused;
-    }
-    @keyframes headline {
-      from {transform: translate(0, 6rem); opacity: 0.0;}
-    }
-    
-    
-    .bottom-bar {
-      position: absolute;
-      width: 100vw;
-      height: 8rem;
-      left: 0;
-      bottom: 3rem;
-      font-size: 6rem;
-    }
-    .weather {
-      position: absolute;
-      left: 3rem;
-      top: 0;
-    }
-    .weather .temperature {
-      
-    }
-    .weather .description {
-      font-size: 0.2em;
-      margin-top: -0.8rem;
-      margin-left: 0.5rem;
-    }
-    .time {
-      position: absolute;
-      text-align: right;
-      top: 0;
-      right: 3rem;
-      bottom: 3rem;
-    }
-    #time_sep {
-      display: inline-block;
-      margin-left: 0em;
-      width: 0.3em;
-    }
-    
-    
-    
-    
-    #audio_container {
-      display: none;
-    }
-    
-    .line-conponent {
-      width: 9rem;
-      height: 1px;
-      background: #FFF;
-      position: absolute;
-    }
-    .line-conponent .mask {
-      position: relative;
-      z-index: 10;
-      background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1), rgba(0, 0, 0, 1));
-      width: 300%;
-      height: 100%;
-      animation: line-fade-in 2s;
-      animation-timing-function: ease-out;
-      animation-fill-mode: forwards;
-      opacity: 1;
-    }
-    @keyframes line-fade-in{
-      from {transform: translate(-66%, 0);}
-    }
+  }
+  #news_content_fullDOM {
+    position: absolute;
+    top: -20vh; left: 0;
+    width: 70vw;
+    opacity: 0;
+  }
+  #news_content_fullDOM p {
+    font-size: 0.7rem
+  }
+  
+  /* === Bottom Taskbar === */
+  .taskbar {
+    position: absolute;
+    width: 100vw;
+    height: 12vh;
+    bottom: 0;
+  }
+  .taskbar .left {
+    position: absolute;
+    left: 3vw;
+    width: 40vw;
+    bottom: 3vw;
+  }
+  .taskbar .right {
+    position: absolute;
+    right: 4vw;
+    text-align: right;
+    width: 40vw;
+    bottom: 5.5vw;
+  }
+  .clock {
+    font-size: 10vw;
+  }
+  .date {
+    margin-left: 0.5vw;
+    margin-top: -1vw;
+  }
+  .temperature {
+    font-size: 10vw;
+  }
+  #clock_sepDOM {
+    margin-left: -2.5vw;
+    margin-right: -2.5vw;
+  }
   </style>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script>
-  var time_flag = false;
+  
+  var start_detection = false;
   var updateTime = function() {
-    let d = new Date();
-    let hh = d.getHours(); 
-    let mm = d.getMinutes();
-    time_HH.innerHTML = hh < 10 ? "0" + hh: hh;
-    time_MM.innerHTML = mm < 10 ? "0" + mm: mm;
-    time_sep.innerHTML = time_flag ? ":": "";
-    time_flag = !time_flag;
-  }
-  
-  
-  
-  var sayVoice = function() {
-    const req = new XMLHttpRequest();
-    const url = "/voice";
-    req.open("GET", url);
-    req.send();
+    let current_time = new Date();
+    let h = current_time.getHours();
+    let m = current_time.getMinutes();
+    clock_HHDOM.innerHTML = h >= 10 ? h: "0" + h;
+    clock_MMDOM.innerHTML = m >= 10 ? m: "0" + m;
+    let day = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][current_time.getDay()];
+    let month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][current_time.getMonth()];
+    dateDOM.innerHTML = day+", "+month+". "+current_time.getDate();
   }
   
   var trimSource = function(headline) {
@@ -146,54 +177,175 @@
     req.send();
     req.onreadystatechange = function() {
       data = JSON.parse(req.responseText);
-      console.log(data);
       news_0.innerHTML = trimSource(data.articles[0].title);
       news_1.innerHTML = trimSource(data.articles[1].title);
       news_2.innerHTML = trimSource(data.articles[2].title);
-      setTimeout(function() {news_0.style.animationPlayState = "running"}, 1600);
-      setTimeout(function() {news_1.style.animationPlayState = "running"}, 2000);
-      setTimeout(function() {news_2.style.animationPlayState = "running"}, 2400);
+      news_0t.innerHTML = data.articles[0].title;
+      news_0t.innerHTML = data.articles[0].description;
+      news_1t.innerHTML = data.articles[1].title;
+      news_1f.innerHTML = data.articles[1].description;
+      news_2t.innerHTML = data.articles[2].title;
+      news_2f.innerHTML = data.articles[2].description;
+      news_3t.innerHTML = data.articles[3].title;
+      news_3f.innerHTML = data.articles[3].description;
+      news_4t.innerHTML = data.articles[4].title;
+      news_4f.innerHTML = data.articles[4].description;
     }
+  }
+  
+  
+  /* === User Actions === */
+  var position = 0;
+  var toRight = function() {
+    if (position == document.querySelectorAll(".pagination .dot").length - 1) return;
+    position += 1;    
+    $("#leading_blockDOM").animate({marginLeft: (-position*100)+"vw"});
+    document.querySelectorAll(".pagination .dot").forEach(function(elem) {elem.classList.remove("active")});
+    document.querySelectorAll(".pagination .dot")[position].className += " active";
+  }
+  var toLeft = function() {
+    if (position == 0) return;
+    position -= 1;
+    $("#leading_blockDOM").animate({marginLeft: (-position*100)+"vw"});
+    document.querySelectorAll(".pagination .dot").forEach(function(elem) {elem.classList.remove("active")});
+    document.querySelectorAll(".pagination .dot")[position].className += " active";
+  }
+  var expanded = false;
+  var expandEvent = function() {
+    if (position != document.querySelectorAll(".pagination .dot").length - 1) return;
+    if (expanded) {
+      $("#news_titleDOM").animate({top: "-33vh"});
+      $("#news_content_simpleDOM").animate({opacity: 0});
+      $("#news_content_fullDOM").animate({opacity: 1});
+    } else {
+      $("#news_titleDOM").animate({top: "0"});
+      $("#news_content_simpleDOM").animate({opacity: 1});
+      $("#news_content_fullDOM").animate({opacity: 0});
+    }
+    expanded = !expanded;
+  }
+  
+  var sayVoice = function() {
+    const req = new XMLHttpRequest();
+    const url = "/voice";
+    req.open("GET", url);
+    req.send();
   }
   
   window.onload = function() {
     updateTime();
-    setInterval(updateTime, 1000);
-    setTimeout(sayVoice, 1000);
     getNews();
+    var clock_tick = false;
+    setInterval(function() {clock_sepDOM.style.color = clock_tick ? "#000" : "#FFF"; clock_tick = !clock_tick}, 500);
     setTimeout(function() {
-      greet.style.animation = "greet-out 2s";
-      }, 3000);
+      greetDOM.style.animation = "ascent-out 1.5s ease-in";
+      one_line_a_dayDOM.style.animation = "ascent-out 1.5s ease-in";
+      }, 9000);
     setTimeout(function() {
-      greet.style.display = "none";
-      }, 5000);
-  };
-  
+      block_listDOM.style.animationPlayState = "running";
+      start_detection = true;
+      }, 10000);
+    sayVoice();
+  }
+  document.addEventListener("keydown", function(e) {
+      console.log(e.keyCode)
+    switch (e.keyCode) {
+      case 39:
+        toRight();
+        break;
+      case 37:
+        toLeft();
+        break;
+      case 32:
+      case 38:
+        expandEvent();
+      case 48:
+        $("#camvid").toggle();
+    }
+  })
   </script>
 </head>
 <body>
-  <div id="greet" class="greet">{{ data["greet"]["text"] }}</div>
-  <div class="news">
-    <div id="news_0" class="headlines"></div>
-    <div id="news_1" class="headlines"></div>
-    <div id="news_2" class="headlines"></div>
+  <div class="landing">
+    <div class="greet" id="greetDOM">{{ data["greet"]["text"] }}</div>
+    <div class="one-line-a-day" id="one_line_a_dayDOM">{{ data["one_line_a_day"]["text"] }}</div>
   </div>
-  
-  <div class="bottom-bar">
-    <div>
-      <div class="weather">
-        <div class="temperature">{{ data["weather"]["temperatureMax"] }}/{{ data["weather"]["temperatureMin"] }}℉</div>
-        <div class="description">{{ data["weather"]["text"] }}</div>
+  <div class="block-list" id="block_listDOM">
+    <div class="wrap">
+      <div class="block" id="leading_blockDOM">
+        <div class="title">Tasks to do</div>
+        <div class="line"></div>
+        <div class="content">
+          {% for entry in data["calendar"]["text"] %}
+          <p>{{ entry }}</p>
+          {% endfor %}
+        </div>
       </div>
-      <div class="time"><span id="time_HH"></span><span id="time_sep"></span><span id="time_MM"></span></div>
+      <div class="block" id="leading_blockDOM">
+        <div class="title">My Morning Habit</div>
+        <div class="line"></div>
+        <div class="content">
+          {% for entry in data["habits"] %}
+          <p>{{ entry }}</p>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="news block">
+        <div id="news_titleDOM" class="title">What's going on around<div class="line"></div></div>
+        <div class="content" id="news_content_simpleDOM">
+          <p id="news_0"></p>
+          <p id="news_1"></p>
+          <p id="news_2"></p>
+        </div>
+        <div class="content" id="news_content_fullDOM">
+          <h4 id="news_0t"></h4>
+          <p id="news_0f"></p>
+          <h4 id="news_1t"></h4>
+          <p id="news_1f"></p>
+          <h4 id="news_2t"></h4>
+          <p id="news_2f"></p>
+          <h4 id="news_3t"></h4>
+          <p id="news_3f"></p>
+          <h4 id="news_4t"></h4>
+          <p id="news_4f"></p>
+        </div>
+      </div>
+    </div>
+    <div class="pagination">
+      <div class="active dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </div>
+  <div class="taskbar">
+    <div>
+      <div class="left">
+        <div class="clock">
+          <span id="clock_HHDOM">00</span>
+          <span id="clock_sepDOM">:</span>
+          <span id="clock_MMDOM">00</span>
+        </div>
+        <div class="date" id="dateDOM"></div>
+      </div>
+      <div class="right">
+        <div class="temperature" id="temperatureDOM">{{ data["weather"]["temperatureMax"] }}/{{ data["weather"]["temperatureMin"] }}℉</div>
+      </div>
     </div>
   </div>
   
   
-  <div id="audio_container"></div>
-  
-  
-  
-  <div class="line-conponent"><div class="mask"></div><div class="line"></div></div>
+  <div id="camvid" style="display: none">
+        <video id="video" playsinline="" style=" -moz-transform: scaleX(-1);
+        -o-transform: scaleX(-1);
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+        display: none;
+        " width="600" height="500">
+        </video>
+        <canvas id="output" width="600" height="500"></canvas>
+    </div>
+
+    <script src="{{ url_for("static", filename="net/processing.js") }}"></script>
+    <script src="{{ url_for("static", filename="net/posenet.js") }}"></script>
 </body>
 </html>

@@ -1,3 +1,7 @@
+""" calander_api.py
+
+Get Google Calendar events.
+"""
 from __future__ import print_function
 import datetime
 import pickle
@@ -41,10 +45,21 @@ def getCalendar():
                                         maxResults=10, singleEvents=True,
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
-
+    
     if not events:
-        print('No upcoming events found.')
-    return events
-
-if __name__ == '__main__':
-    getCalendar()
+        return False
+    today = datetime.datetime.now().day
+    data = {}
+    data["text"] = []
+    s = "You have "
+    s_format = " at %H:%M today and "
+    t_format = " %H:%M - "
+    for event in events:
+        dtime = datetime.datetime.strptime(event["start"]["dateTime"], "%Y-%m-%dT%H:%M:%S%z")
+        if dtime.day == today:
+            s += event["summary"] + dtime.strftime(s_format)
+            data["text"].append(dtime.strftime(t_format)+event["summary"])
+    s = s[:-4]
+    data["voice"] = s
+    return data
+    
